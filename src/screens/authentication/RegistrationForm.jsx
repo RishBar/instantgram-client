@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Form,
   Button
@@ -21,6 +21,7 @@ const RegistrationForm = props => {
 
   const [data, setData] = useState(initialData);
   const {setCurrentUser} = useContext(appContext);
+  const history = useHistory();
 
   const handleChange = (e, { name, value }) => {
     setData({ ...data, [name]: value });
@@ -42,6 +43,7 @@ const RegistrationForm = props => {
         let user = response.data.data;
         saveCurrentUser(user);
         setCurrentUser(user);
+        history.push("/");
       })
       .catch(function(error) {
         console.log(error.response);;
