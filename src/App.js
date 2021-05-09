@@ -1,9 +1,13 @@
 import './App.css';
-import RegistrationForm from './components/RegistrationForm';
+import RegistrationForm from './screens/authentication/RegistrationForm';
+import Screens from './screens';
+import AppProvider from './providers/AppProvider'
 
 function App() {
   return (
-    <RegistrationForm/>
+    <AppProvider>
+      <Screens/>
+    </AppProvider>
   );
 }
 

@@ -4,13 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from "axios";
+import 'semantic-ui-css/semantic.min.css'
+import { BrowserRouter } from "react-router-dom";
 
 axios.defaults.baseURL = process.env.REACT_APP_INSTANTGRAM_API || 'http://localhost:3001';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <BrowserRouter>
     <App />
-  </React.StrictMode>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 
