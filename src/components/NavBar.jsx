@@ -3,6 +3,7 @@ import { Link, Route, useLocation } from "react-router-dom";
 import appContext from '../contexts/AppContext';
 import styled, {css} from 'styled-components';
 import axios from "axios";
+import logo from '../assets/logo.png';
 
 const MainNav = styled.nav`
   position: fixed;
@@ -16,6 +17,15 @@ const MainNav = styled.nav`
   top: 0;
   z-index: 100;
 `;
+
+const Logo = styled.img`
+  width: 150px;
+  height: auto;
+  margin-right: 20px;
+  @media only screen and (max-width: 600px) {
+    width: 30vw;
+  }
+`
 
 const Flex = styled.div`
   display: flex;
@@ -38,7 +48,7 @@ const NavBar = () => {
     <> 
       <MainNav>
         <Flex>
-          <p>hey</p>
+          <Link to="/"><Logo src={logo}/></Link>
           <p>hey</p>
           <p>hey</p>
           <p>hey</p>
@@ -46,12 +56,14 @@ const NavBar = () => {
             <button class="ui negative basic button" onClick={logOut}>
               Logout
             </button> 
-            : 
+            :
+            <> 
             <Link to="/login">
               <button class="ui primary button">
                 Login
               </button>
             </Link>  
+            </>
           }
         </Flex>
       </MainNav>

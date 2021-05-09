@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   Form,
   Button
@@ -67,6 +68,7 @@ const LoginForm = props => {
             Submit
           </Button>
         </Form>
+        <p>Dont have an account? <a href="/register">Sign up!</a></p>
       </Content>
   )
 }

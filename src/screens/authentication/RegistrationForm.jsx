@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import {
   Form,
   Button
@@ -91,6 +92,7 @@ const RegistrationForm = props => {
             Submit
           </Button>
         </Form>
+        <p>Already have an account? <a href="/login">Login!</a></p>
       </Content>
   )
 }
