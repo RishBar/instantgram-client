@@ -13,8 +13,12 @@ import RegisterForm from '../../screens/authentication/RegistrationForm';
 
 
 const LandingPage = props => {
-  const [data, setData] = useState({preview: ""});
+  const [data, setData] = useState({caption: "", preview: ""});
   const {currentUser} = useContext(appContext);
+
+  const handleChange = (e, { name, value }) => {
+    setData({ ...data, [name]: value });
+  };
 
   const handleUpload = async (e, { name }) => {
     const file = e.target.files[0];
@@ -22,11 +26,31 @@ const LandingPage = props => {
   };
 
   const handleSubmit = () => {
-    const { preview } = data;
-    axios
-      .post(`/users/${currentUser.id}/upload_image`, {
-        preview
-      })
+    const { caption, preview } = data;
+    const formData = new FormData();
+    formData.append('caption', caption)
+    formData.append('images', preview)
+    fetch('http://localhost:3001/posts', {
+      method: 'POST',
+      headers: new Headers({
+        'access-token': localStorage.getItem(
+          "access-token"
+        ), 
+        'token-type': localStorage.getItem(
+          "token-type"
+        ),
+        'client': localStorage.getItem(
+          "client"
+        ),
+        'expiry': localStorage.getItem(
+          "expiry"
+        ),
+        'uid': localStorage.getItem(
+          "uid"
+        ),
+      }),
+      body: formData
+    })
       .then(function(response) {
         console.log(response)
       })
@@ -35,33 +59,43 @@ const LandingPage = props => {
       });
   };
   return (
-    console.log(localStorage.getItem(
-      "token-type")),
+    console.log(data.preview),
     <Content>
       { currentUser?
-        <Form onSubmit={handleSubmit} style={{paddingTop: "100px"}}>
-          <Form.Field>
-                <label>Upload an image!</label>
-                {data.preview && (
-                  <Image
-                    src={URL.createObjectURL(data.preview)}
-                    size="medium"
-                    alt="image to upload"
+        <>
+          <h3 style={{paddingTop: "100px"}}>Make a post!</h3>
+          <Form onSubmit={handleSubmit}>
+            <Form.Field>
+              <Input
+                label="Caption"
+                name="caption"
+                accept="image/*"
+                onChange={handleChange}
+              />
+            </Form.Field>
+            <Form.Field>
+                  {data.preview && (
+                    <Image
+                      src={URL.createObjectURL(data.preview)}
+                      size="medium"
+                      alt="image to upload"
+                    />
+                  )}
+                  <Input
+                    name="preview"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUpload}
                   />
-                )}
-                <Input
-                  name="preview"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleUpload}
-                />
-          </Form.Field>
-          <Button primary type="submit" >
-            Upload
-          </Button>
-        </Form>
+            </Form.Field>
+            <Button primary type="submit" >
+              Upload
+            </Button>
+          </Form>
+        </>
         :
         <RegisterForm/>
+      
       }
     </Content>
   )
