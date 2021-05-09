@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import Content from "../../components/Content"
 import appContext from '../../contexts/AppContext';
-import { saveCurrentUser } from '../../commonFunctions/functions';
+import { saveCurrentUser, saveHeaders } from '../../commonFunctions/functions';
 
 
 const RegistrationForm = props => {
@@ -40,6 +40,7 @@ const RegistrationForm = props => {
         }
       })
       .then(function(response) {
+        saveHeaders(response.headers);
         let user = response.data.data;
         saveCurrentUser(user);
         setCurrentUser(user);
@@ -53,7 +54,7 @@ const RegistrationForm = props => {
   return (
     <Content>
       <Form onSubmit={handleSubmit} style={{paddingTop: "100px"}} >
-          <h1>Register</h1> 
+          <h1>Register and start posting grams!</h1> 
           <Form.Input
             label="E-mail"
             name="email"

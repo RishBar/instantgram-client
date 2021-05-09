@@ -7,7 +7,7 @@ import {
 import axios from "axios";
 import Content from "../../components/Content";
 import appContext from '../../contexts/AppContext';
-import { saveCurrentUser } from '../../commonFunctions/functions';
+import { saveCurrentUser, saveHeaders } from '../../commonFunctions/functions';
 
 
 const LoginForm = props => {
@@ -37,6 +37,7 @@ const LoginForm = props => {
         let user = response.data.data;
         saveCurrentUser(user);
         setCurrentUser(user);
+        saveHeaders(response.headers)
         history.push("/");
       })
       .catch(function(error) {
