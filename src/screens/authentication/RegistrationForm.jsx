@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Form,
   Button
 } from "semantic-ui-react";
 import axios from "axios";
 import Content from "../../components/Content"
+import appContext from '../../contexts/AppContext';
+import { saveCurrentUser } from '../../commonFunctions/functions';
 
 
 const RegistrationForm = props => {
@@ -17,6 +19,7 @@ const RegistrationForm = props => {
   };
 
   const [data, setData] = useState(initialData);
+  const {setCurrentUser} = useContext(appContext);
 
   const handleChange = (e, { name, value }) => {
     setData({ ...data, [name]: value });
@@ -35,7 +38,9 @@ const RegistrationForm = props => {
         }
       })
       .then(function(response) {
-        console.log("signed uppp!!!");
+        let user = response.data.data;
+        saveCurrentUser(user);
+        setCurrentUser(user);
       })
       .catch(function(error) {
         console.log(error.response);;
@@ -76,7 +81,7 @@ const RegistrationForm = props => {
           <Form.Input
           label="Password Confirmation"
           name="password_confirmation"
-          type="password_confirmation"
+          type="password"
           placeholder="Password Confirmation"
           value={data.password_confirmation}
           onChange={handleChange}

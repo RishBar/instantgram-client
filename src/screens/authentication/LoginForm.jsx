@@ -17,7 +17,7 @@ const LoginForm = props => {
   };
 
   const [data, setData] = useState(initialData);
-  const {setCurrentUser, currentUser} = useContext(appContext);
+  const {setCurrentUser} = useContext(appContext);
 
   const handleChange = (e, { name, value }) => {
     setData({ ...data, [name]: value });
@@ -32,13 +32,12 @@ const LoginForm = props => {
         password: password
       })
       .then(function(response) {
-        console.log(response);
         let user = response.data.data;
         saveCurrentUser(user);
         setCurrentUser(user);
       })
       .catch(function(error) {
-        console.log(error.response);;
+        console.log(error.response);
       });
   };
 
