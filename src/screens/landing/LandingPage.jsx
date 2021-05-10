@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import {
   Form,
   Button,
@@ -10,26 +11,54 @@ import Content from "../../components/Content";
 import appContext from '../../contexts/AppContext';
 import { saveCurrentUser } from '../../commonFunctions/functions';
 import RegisterForm from '../../screens/authentication/RegistrationForm';
+import styled, {css} from 'styled-components';
 
+const Flex = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  flex-direction: row;
+  flex-basis: 33.333333%;
+  justify-content: space-between;
+`
+
+const CenterDiv = styled.div`
+  width: 100%;
+  text-align: center;
+`
 
 const LandingPage = props => {
-  const [data, setData] = useState({caption: "", preview: ""});
+  const [data, setData] = useState({preview: []});
+  const [posts, setPosts] = useState([])
   const {currentUser} = useContext(appContext);
+  const history = useHistory()
 
-  const handleChange = (e, { name, value }) => {
-    setData({ ...data, [name]: value });
-  };
+  useEffect(() => {
+    axios.get(`/posts`)
+    .then((response) => {
+      console.log(response);
+      for (let post of response.data) {
+        setPosts(prev => {
+          setPosts([...prev, post.images.url])
+        })
+      }
+    })
+  }, []);
 
-  const handleUpload = async (e, { name }) => {
+  const handleUpload = async (e) => {
     const file = e.target.files[0];
-    setData({ ...data, [name]: file });
+    setData({ preview: [...data.preview, file] });
   };
 
   const handleSubmit = () => {
-    const { caption, preview } = data;
+    const { preview } = data;
     const formData = new FormData();
-    formData.append('caption', caption)
-    formData.append('images', preview)
+    // for (let pic of preview) {
+    //   formData.append('images', pic)
+    // }
+    preview.forEach(pic => {
+      formData.append('images[]', pic)
+    })
     fetch('http://localhost:3001/posts', {
       method: 'POST',
       headers: new Headers({
@@ -52,46 +81,52 @@ const LandingPage = props => {
       body: formData
     })
       .then(function(response) {
-        console.log(response)
+        history.go(0)
       })
       .catch(function(error) {
         console.log(error.response);
       });
   };
+  
+  const images = posts? posts.map(image => {
+    return(
+      <img style={{width: "300px", height:"300px", paddingBottom:"20px", marginLeft:"auto", marginRight:"auto"}}src={image}></img>
+    )
+  }) : []
+  const previews = data.preview? data.preview.map(preview => {
+    return(
+      <img style={{width: "100px", height:"100px"}}src={URL.createObjectURL(preview)}></img>
+    )
+  }) : []
   return (
-    console.log(data.preview),
     <Content>
       { currentUser?
         <>
-          <h3 style={{paddingTop: "100px"}}>Make a post!</h3>
-          <Form onSubmit={handleSubmit}>
-            <Form.Field>
-              <Input
-                label="Caption"
-                name="caption"
-                accept="image/*"
-                onChange={handleChange}
-              />
-            </Form.Field>
-            <Form.Field>
-                  {data.preview && (
-                    <Image
-                      src={URL.createObjectURL(data.preview)}
-                      size="medium"
-                      alt="image to upload"
+          <CenterDiv><h3 style={{paddingTop: "100px"}}>Make a post!</h3></CenterDiv>
+          <Form onSubmit={handleSubmit} style={{paddingBottom: "30px", paddingTop:"30px"}}>
+            <CenterDiv>
+              <Form.Field>
+                    {data.preview && (
+                      previews
+                    )}
+                    <input
+                      name="preview"
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleUpload}
                     />
-                  )}
-                  <Input
-                    name="preview"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleUpload}
-                  />
-            </Form.Field>
-            <Button primary type="submit" >
-              Upload
-            </Button>
+              </Form.Field>
+              <Button primary type="submit" >
+                Upload
+              </Button>
+            </CenterDiv>
           </Form>
+          <CenterDiv>
+            <Flex>
+              {images}
+            </Flex>
+          </CenterDiv>
         </>
         :
         <RegisterForm/>

@@ -21,11 +21,9 @@ export const removeHeaders = () => {
 };
 
 export function saveHeaders(headers) {
-  console.log(headers['access-token']);
   if (headers["access-token"]) {
     localStorage.setItem("access-token", headers["access-token"]);
   }
-  console.log(localStorage.getItem('access-token'));
   if (headers["expiry"]) {
     localStorage.setItem("expiry", headers["expiry"]);
   }

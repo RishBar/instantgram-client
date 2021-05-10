@@ -49,9 +49,6 @@ const NavBar = () => {
       <MainNav>
         <Flex>
           <Link to="/"><Logo src={logo}/></Link>
-          <p>hey</p>
-          <p>hey</p>
-          <p>hey</p>
           { currentUser?
             <button class="ui negative basic button" onClick={logOut}>
               Logout

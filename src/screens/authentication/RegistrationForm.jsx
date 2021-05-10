@@ -42,9 +42,7 @@ const RegistrationForm = props => {
       .then(function(response) {
         saveHeaders(response.headers);
         let user = response.data.data;
-        saveCurrentUser(user);
-        setCurrentUser(user);
-        history.push("/");
+        history.push("/login");
       })
       .catch(function(error) {
         console.log(error.response);;
