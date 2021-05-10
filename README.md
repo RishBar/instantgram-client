@@ -4,8 +4,8 @@ This is a front end react client for an image repository. The backend rails api 
 
 ## Key npm package dependencies
 
--semantic-ui-react
--styled-components
+1. semantic-ui-react
+2. styled-components
 
 ## Available Scripts
 
