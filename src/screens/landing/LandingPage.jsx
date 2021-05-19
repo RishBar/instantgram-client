@@ -36,11 +36,18 @@ const LandingPage = props => {
   useEffect(() => {
     axios.get(`/posts`)
     .then((response) => {
-      console.log(response);
       for (let post of response.data) {
-        setPosts(prev => {
-          setPosts([...prev, post.images.url])
-        })
+        if (post.images.length > 1) {
+          for (let url of post.images) {
+            setPosts(prev => {
+              setPosts([...prev, url])
+            })
+          }
+        } else {
+          setPosts(prev => {
+            setPosts([...prev, post.images[0]])
+          })
+        }
       }
     })
   }, []);
@@ -84,7 +91,6 @@ const LandingPage = props => {
         history.go(0)
       })
       .catch(function(error) {
-        console.log(error.response);
       });
   };
   
