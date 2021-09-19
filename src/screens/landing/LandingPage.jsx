@@ -1,13 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, Fragment } from "react";
 import { Link, useHistory } from "react-router-dom";
 import {
   Form,
   Button,
-  Image,
   Input
 } from "semantic-ui-react";
 import axios from "axios";
 import Content from "../../components/Content";
+import Post from "../../components/Post";
+import Image from "../../components/Image";
 import appContext from '../../contexts/AppContext';
 import { saveCurrentUser } from '../../commonFunctions/functions';
 import RegisterForm from '../../screens/authentication/RegistrationForm';
@@ -36,18 +37,21 @@ const LandingPage = props => {
   useEffect(() => {
     axios.get(`/posts`)
     .then((response) => {
+      console.log(response);
       for (let post of response.data) {
+        let postsObj = {user: post.user.username, 
+          date: post.created_at.slice(0, 10),
+          pics: []};
         if (post.images.length > 1) {
           for (let url of post.images) {
-            setPosts(prev => {
-              setPosts([...prev, url])
-            })
+            postsObj.pics.push(url)
           }
         } else {
-          setPosts(prev => {
-            setPosts([...prev, post.images[0]])
-          })
+          postsObj.pics.push(post.images[0])
         }
+        setPosts(prev => {
+          setPosts([...prev, postsObj])
+        })
       }
     })
   }, []);
@@ -94,11 +98,42 @@ const LandingPage = props => {
       });
   };
   
-  const images = posts? posts.map(image => {
-    return(
-      <img style={{width: "300px", height:"300px", paddingBottom:"20px", marginLeft:"auto", marginRight:"auto"}}src={image}></img>
-    )
+  // const images = posts? posts.map(image => {
+  //   return(
+  //     <img style={{width: "300px", height:"300px", paddingBottom:"20px", marginLeft:"auto", marginRight:"auto"}}src={image}></img>
+  //   )
+  // }) : []
+  const images = posts? posts.map(post => {
+    const pics = post.pics.map(pic => {
+      return (<Image  src={pic} />)
+    })
+    return (post.pics.length > 1?
+      <>
+        <h1 style={{"display": "flex", "justifyContent": "center"}}>
+          Posted by: {post.user}
+        </h1>
+        <h1 style={{"display": "flex", "justifyContent": "center"}}>
+          At: {post.date}
+        </h1>
+        <Post many> 
+          {pics} 
+        </Post>
+      </>
+        :
+      <>
+        <h1 style={{"display": "flex", "justifyContent": "center"}}>
+          Posted by: {post.user}
+        </h1>
+        <h1 style={{"display": "flex", "justifyContent": "center"}}>
+          At: {post.date}
+        </h1>
+        <Post one> 
+          {pics} 
+        </Post>
+      </>
+    )  
   }) : []
+
   const previews = data.preview? data.preview.map(preview => {
     return(
       <img style={{width: "100px", height:"100px"}}src={URL.createObjectURL(preview)}></img>
@@ -128,11 +163,9 @@ const LandingPage = props => {
               </Button>
             </CenterDiv>
           </Form>
-          <CenterDiv>
-            <Flex>
-              {images}
-            </Flex>
-          </CenterDiv>
+
+            {images}
+        
         </>
         :
         <RegisterForm/>
