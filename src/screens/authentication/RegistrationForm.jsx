@@ -37,6 +37,10 @@ const RegistrationForm = props => {
           username: username,
           password: password,
           password_confirmation: password_confirmation
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': 'https://instantgram6-frontend.herokuapp.com/'
         }
       })
       .then(function(response) {
