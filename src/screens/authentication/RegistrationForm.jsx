@@ -45,7 +45,7 @@ const RegistrationForm = props => {
         history.push("/login");
       })
       .catch(function(error) {
-        console.log(error.response);;
+        console.log(error);;
       });
   };
 
