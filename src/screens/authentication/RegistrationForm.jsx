@@ -40,7 +40,7 @@ const RegistrationForm = props => {
         },
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'https://instantgram6-frontend.herokuapp.com/'
+          'Access-Control-Allow-Origin': '*'
         }
       })
       .then(function(response) {
