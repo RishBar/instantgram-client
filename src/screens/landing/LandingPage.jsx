@@ -98,11 +98,6 @@ const LandingPage = props => {
       });
   };
   
-  // const images = posts? posts.map(image => {
-  //   return(
-  //     <img style={{width: "300px", height:"300px", paddingBottom:"20px", marginLeft:"auto", marginRight:"auto"}}src={image}></img>
-  //   )
-  // }) : []
   const images = posts? posts.map(post => {
     const pics = post.pics.map(pic => {
       return (<Image  src={pic} />)

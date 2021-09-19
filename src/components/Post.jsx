@@ -8,6 +8,7 @@ ${props => props.many && css`
   width: 100%;
   flex-direction: row;
   flex-basis: 33.333333%;
+  flex-wrap: wrap;
   justify-content: space-around;
   border: 2px solid;
   padding: 5px;
