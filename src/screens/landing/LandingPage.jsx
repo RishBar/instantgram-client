@@ -89,6 +89,7 @@ const LandingPage = props => {
         'uid': localStorage.getItem(
           "uid"
         ),
+        'Access-Control-Allow-Origin': 'https://instantgram6-frontend.herokuapp.com/',
       }),
       body: formData
     })

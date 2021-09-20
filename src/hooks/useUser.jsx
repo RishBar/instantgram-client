@@ -10,7 +10,11 @@ const useUser = () => {
   useEffect(() => {
     if (currentUser && currentUser.id && !fresh) {
       const getAndSetCurrentUser = () => {
-        axios.get(`/users/${currentUser.id}`)
+        axios.get(`/users/${currentUser.id}`, {
+          headers: {
+          'Access-Control-Allow-Origin': 'https://instantgram6-frontend.herokuapp.com/'
+          } 
+        })
           .then((res) => {
             setCurrentUser(res.data.user)
             setFresh(true)
