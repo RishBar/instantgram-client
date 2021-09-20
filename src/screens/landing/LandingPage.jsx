@@ -35,7 +35,11 @@ const LandingPage = props => {
   const history = useHistory()
 
   useEffect(() => {
-    axios.get(`/posts`)
+    axios.get(`/posts`, {
+      headers: {
+        'Access-Control-Allow-Origin': 'https://instantgram6-frontend.herokuapp.com/'
+      }
+    })
     .then((response) => {
       for (let post of response.data) {
         let postsObj = {user: post.user.username, 
@@ -67,7 +71,7 @@ const LandingPage = props => {
       formData.append('images[]', pic)
     })
     let baseURL = process.env.REACT_APP_INSTANTGRAM_API || 'http://localhost:3001'
-    fetch(`${baseURL}/posts`, {
+    fetch(`${baseURL}posts`, {
       method: 'POST',
       headers: new Headers({
         'access-token': localStorage.getItem(
