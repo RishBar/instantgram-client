@@ -37,7 +37,6 @@ const LandingPage = props => {
   useEffect(() => {
     axios.get(`/posts`)
     .then((response) => {
-      console.log(response);
       for (let post of response.data) {
         let postsObj = {user: post.user.username, 
           date: post.created_at.slice(0, 10),
@@ -60,17 +59,15 @@ const LandingPage = props => {
     const file = e.target.files[0];
     setData({ preview: [...data.preview, file] });
   };
-
+  
   const handleSubmit = () => {
     const { preview } = data;
     const formData = new FormData();
-    // for (let pic of preview) {
-    //   formData.append('images', pic)
-    // }
     preview.forEach(pic => {
       formData.append('images[]', pic)
     })
-    fetch('http://localhost:3001/posts', {
+    let baseURL = process.env.REACT_APP_INSTANTGRAM_API || 'http://localhost:3001'
+    fetch(`${baseURL}/posts`, {
       method: 'POST',
       headers: new Headers({
         'access-token': localStorage.getItem(
